@@ -1,3 +1,3 @@
-#include <print>
+#include <spdlog/spdlog.h>
 
-auto main() -> int { std::print("Hello, World!"); }
+auto main() -> int { spdlog::info("Starting cakeprotocol"); }
