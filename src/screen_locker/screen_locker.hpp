@@ -15,7 +15,6 @@
 
 #if defined(SL_PLATFORM_LINUX) || defined(SL_PLATFORM_MACOS)
 #include <array>
-#include <cstdio>
 #include <cstdlib>
 #endif
 
