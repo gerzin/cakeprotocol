@@ -1,5 +1,3 @@
-import <print>
+#include <print>
 
-auto main() -> int {
-    std::print("Hello, World!");
-}
+auto main() -> int { std::print("Hello, World!"); }
