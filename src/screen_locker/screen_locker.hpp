@@ -1,3 +1,7 @@
+/**
+ * TLDR: cake::screen_locker::ScreenLocker::lock() will lock the screen.
+ */
+
 #pragma once
 
 #include <expected>
@@ -86,12 +90,7 @@ inline LockResult ScreenLocker::lock() noexcept {
   }
   return {};
 #elif defined(SL_PLATFORM_LINUX)
-  // On Linux we try a list of common screen-locking commands in order of
-  // preference:
-  //  loginctl  – systemd (most modern distros, Wayland + X11)
-  //  xdg-screensaver – XDG standard (X11)
-  //  gnome-screensaver-command – GNOME fallback
-  //  dm-tool (LightDM)
+  // On Linux we try a list of common screen-locking commands hoping one works.
   constexpr std::array candidates{
       "loginctl lock-session",
       "xdg-screensaver lock",
