@@ -1,0 +1,16 @@
+########################
+# Import bazelrc presets
+import %workspace%/tools/bazelrc.bazelrc
+
+########################
+# Project-specific flags
+
+build --cxxopt=-std=c++23
+build --host_cxxopt=-std=c++23
+
+########################
+# User preferences
+# Load any settings & overrides specific to the current user from `user.bazelrc`.
+# This file should appear in `.gitignore` so that settings are not shared with team members.
+# This should be last statement in this config so the user configuration overrides anything above.
+try-import %workspace%/user.bazelrc

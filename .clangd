@@ -1,0 +1,21 @@
+CompileFlags:
+  Add:
+    - "-std=c++23"
+    - "-xc++"
+  CompilationDatabase: .
+
+Diagnostics:
+  UnusedIncludes: Strict
+  ClangTidy:
+    Add:
+      - modernize-*
+      - performance-*
+      - readability-*
+      - bugprone-*
+    Remove:
+      - modernize-use-trailing-return-type
+
+InlayHints:
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true
