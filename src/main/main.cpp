@@ -1,3 +1,8 @@
-#include <spdlog/spdlog.h>
+#include "application.hpp"
+#include <cstdlib>
+auto main() -> int {
+  Application app;
+  app.run();
 
-auto main() -> int { spdlog::info("Starting cakeprotocol"); }
+  return EXIT_SUCCESS;
+}

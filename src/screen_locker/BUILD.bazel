@@ -1,0 +1,9 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "screen_locker",
+    hdrs = ["screen_locker.hpp"],
+    include_prefix = "screen_locker",
+    strip_include_prefix = "",
+    visibility = ["//visibility:public"],
+)
