@@ -1,6 +1,7 @@
 #pragma once
 
 #include <expected>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <string_view>
 
@@ -99,6 +100,7 @@ inline LockResult ScreenLocker::lock() noexcept {
   };
   for (std::string_view cmd : candidates) {
     if (try_command(cmd)) {
+      spdlog::info("Screen locked using command: {}", cmd);
       return {};
     }
   }

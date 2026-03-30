@@ -1,3 +1,7 @@
+"""
+Cross-platform utilites for locking the screen.
+"""
+
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
