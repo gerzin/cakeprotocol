@@ -7,8 +7,10 @@ cc_binary(
         "application.hpp",
         "main.cpp",
     ],
+    visibility = ["//visibility:public"],
     deps = [
         "//src/screen_locker",
+        "//third_party:argparse",
         "@spdlog",
     ],
 )

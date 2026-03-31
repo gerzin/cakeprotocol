@@ -23,7 +23,7 @@
 #include <cstdlib>
 #endif
 
-#ifdef SL_PLATFORM_WINDOWS
+#if defined(SL_PLATFORM_WINDOWS)
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -70,7 +70,26 @@ consteval std::string_view ScreenLocker::platform_name() noexcept {
 }
 
 inline LockResult ScreenLocker::lock() noexcept {
-#ifdef SL_PLATFORM_WINDOWS
+
+#if defined(SL_PLATFORM_LINUX)
+  // On Linux we try a list of common screen-locking commands hoping one works.
+  constexpr std::array candidates{
+      "loginctl lock-session",
+      "xdg-screensaver lock",
+      "gnome-screensaver-command --lock",
+      "dm-tool lock",
+  };
+  for (std::string_view cmd : candidates) {
+    if (try_command(cmd)) {
+      spdlog::info("Screen locked using command: {}", cmd);
+      return {};
+    }
+  }
+  return std::unexpected(
+      "All screen-lock commands failed. "
+      "Ensure one of: loginctl, xdg-screensaver, "
+      "gnome-screensaver-command, or dm-tool is installed and accessible.");
+#elif defined(SL_PLATFORM_WINDOWS)
   // LockWorkStation() is the official Win32 API call.
   if (::LockWorkStation() == 0) {
     const DWORD err{::GetLastError()};
@@ -89,27 +108,9 @@ inline LockResult ScreenLocker::lock() noexcept {
                            "Ensure the binary exists at the expected path.");
   }
   return {};
-#elif defined(SL_PLATFORM_LINUX)
-  // On Linux we try a list of common screen-locking commands hoping one works.
-  constexpr std::array candidates{
-      "loginctl lock-session",
-      "xdg-screensaver lock",
-      "gnome-screensaver-command --lock",
-      "dm-tool lock",
-  };
-  for (std::string_view cmd : candidates) {
-    if (try_command(cmd)) {
-      spdlog::info("Screen locked using command: {}", cmd);
-      return {};
-    }
-  }
-  return std::unexpected(
-      "All screen-lock commands failed. "
-      "Ensure one of: loginctl, xdg-screensaver, "
-      "gnome-screensaver-command, or dm-tool is installed and accessible.");
 #endif
 }
-#ifdef SL_PLATFORM_LINUX
+#if defined(SL_PLATFORM_LINUX)
 inline bool ScreenLocker::try_command(std::string_view cmd) noexcept {
   // Redirect stderr to /dev/null so failed attempts are silent.
   const auto full{std::string(cmd) + " 2>/dev/null"};
