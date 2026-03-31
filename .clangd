@@ -14,11 +14,18 @@ Diagnostics:
       - bugprone-*
     Remove:
       - modernize-use-trailing-return-type
-    ExcludeHeadersFromAnalysis: false
-  Exclude:
-    - "third_party/.*"
 
 InlayHints:
   Enabled: true
   ParameterNames: true
   DeducedTypes: true
+
+---
+# Suppress everything under third_party/
+If:
+  PathMatch: "third_party/.*"
+Diagnostics:
+  Suppress: "*"
+  ClangTidy:
+    Remove:
+      - "*"

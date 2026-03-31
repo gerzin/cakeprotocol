@@ -1,6 +1,7 @@
 #include "application.hpp"
 #include <argparse/argparse.hpp>
 #include <cstdlib>
+#include <exception>
 #include <filesystem>
 #include <spdlog/spdlog.h>
 
