@@ -1,0 +1,14 @@
+"""
+Third party dependencies.
+"""
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+# https://github.com/p-ranav/argparse
+cc_library(
+    name = "argparse",
+    hdrs = ["argparse.hpp"],
+    include_prefix = "argparse",
+    strip_include_prefix = "",
+    visibility = ["//visibility:public"],
+)

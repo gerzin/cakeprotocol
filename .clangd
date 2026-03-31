@@ -14,6 +14,9 @@ Diagnostics:
       - bugprone-*
     Remove:
       - modernize-use-trailing-return-type
+    ExcludeHeadersFromAnalysis: false
+  Exclude:
+    - "third_party/.*"
 
 InlayHints:
   Enabled: true
