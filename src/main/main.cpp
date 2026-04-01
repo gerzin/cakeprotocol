@@ -24,7 +24,7 @@ auto main(int argc, char **argv) -> int {
       .help("camera device index");
 
   args.add_argument("--miss-threshold")
-      .default_value(3)
+      .default_value(2)
       .scan<'i', int>()
       .help("consecutive no-face frames before locking");
 
