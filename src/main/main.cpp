@@ -13,6 +13,9 @@ void signal_handler(int /*signum*/) { Application::request_stop(); }
 auto main(int argc, char **argv) -> int {
   argparse::ArgumentParser args{std::filesystem::path{argv[0]}.stem().string()};
 
+  args.add_description("A simple application to detect user presence and lock "
+                       "the screen when away.");
+
   args.add_argument("--cascade-path")
       .default_value(std::string{"data/haarcascades/"
                                  "haarcascade_frontalface_default.xml"})
