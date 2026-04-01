@@ -9,10 +9,11 @@ This small app called cakeprotocol puts an end to this. It uses uses the webcam 
 
 Developed and tested on Linux. Should work on Mac and Windows too. If it doesn't feel free to open an issue or even better, a PR.
 
-> Among the dependencies there are some that are heavy to compile, like protobuf, that might get you an OOMKilled when trying to compile. For this reason I limited the parallelism in the [user.bazelrc](./user.bazelrc). Usually this file should not be committed. I added it anyway, just tweak it with a value that fits your machine.
 
 ## Build
 The app uses [Bazel](https://bazel.build/install/bazelisk) and C++23.
+
+> Among the dependencies there are some that are heavy to compile, like protobuf, that might get you an OOMKilled when trying to compile. For this reason I limited the parallelism in the [user.bazelrc](./user.bazelrc). Usually this file should not be committed. I added it anyway, just tweak it with a value that fits your machine.
 
 ### Release build
 ```sh
