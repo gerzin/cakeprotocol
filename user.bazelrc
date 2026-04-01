@@ -1,0 +1,2 @@
+# Limit parallel jobs to avoid OOM with heavy C++ builds (OpenCV, protobuf, etc.)
+build --jobs=4

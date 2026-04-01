@@ -9,6 +9,7 @@ cc_binary(
     ],
     visibility = ["//visibility:public"],
     deps = [
+        "//src/away_detector",
         "//src/screen_locker",
         "//third_party:argparse",
         "@spdlog",
