@@ -1,3 +1,2 @@
 # Limit parallel jobs to avoid OOM with heavy C++ builds (OpenCV, protobuf, etc.)
 build --jobs=4
-build --local_ram_resources=HOST_RAM*.6
