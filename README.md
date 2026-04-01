@@ -1,7 +1,5 @@
 # Cake Protocol
 
-> WIP. Detection still missing
-
 At work there's this thing where if someone leaves the laptop unlocked and unattended, passerby colleagues will
 open teams and post **cake** on a random group on teams. Others will pile on with a wave of __cake__ replies.
 
@@ -36,6 +34,7 @@ bazel run //src/main:main
 ```sh
 bazel run //:refresh_compile_commands
 ```
+> Currently having problems with the refresh_compile_commands. For some reason it fails after having added opencv.
 
 ### Update bazelrc presets
 ```sh
