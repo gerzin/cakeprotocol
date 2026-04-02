@@ -12,7 +12,7 @@ Developed and tested on Linux. Should work on Mac and Windows too. If it doesn't
 The app uses [Bazel](https://bazel.build/install/bazelisk) and C++23.
 
 READ 
-> Some dependencies (OpenCV, protobuf) are heavy to compile and may cause out-of-memory errors. If that happens, limit parallelism by adding `build --jobs=4` to user.bazelrc (create this file at the root of the repo) and re-run the build. Since builds are cached, it will continue from where it left off.
+> Some dependencies (OpenCV, protobuf) are heavy to compile and may cause out-of-memory errors. If that happens, limit parallelism by adding something like `build --jobs=4` to user.bazelrc (create this file at the root of the repo) and re-run the build. Since builds are cached, it will continue from where it left off.
 
 ### Release build
 ```sh
