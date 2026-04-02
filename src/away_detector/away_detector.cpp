@@ -13,7 +13,7 @@ AwayDetector::AwayDetector(Config config) : m_config{std::move(config)} {
   }
 }
 
-bool AwayDetector::is_away() const noexcept {
+auto AwayDetector::is_away() const noexcept -> bool {
   if (m_cascade.empty()) {
     spdlog::warn("Cascade classifier not loaded, assuming user is present");
     return false;

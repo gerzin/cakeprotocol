@@ -14,7 +14,7 @@ public:
   explicit Application(Config config);
   auto run() -> void;
 
-  static void request_stop();
+  static auto request_stop() -> void;
 
 private:
   Config m_config;

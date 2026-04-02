@@ -20,7 +20,7 @@ public:
   AwayDetector(AwayDetector &&) = delete;
   AwayDetector &operator=(AwayDetector &&) = delete;
 
-  [[nodiscard]] bool is_away() const noexcept;
+  [[nodiscard]] auto is_away() const noexcept -> bool;
 
 private:
   Config m_config;

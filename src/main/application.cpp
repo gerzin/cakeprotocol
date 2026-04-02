@@ -8,7 +8,7 @@ std::atomic<bool> Application::m_stop_requested{false};
 Application::Application(Config config)
     : m_config{std::move(config)}, m_detector{m_config.detector} {}
 
-void Application::request_stop() { m_stop_requested.store(true); }
+auto Application::request_stop() -> void { m_stop_requested.store(true); }
 
 auto Application::run() -> void {
   using cake::screen_locker::ScreenLocker;
