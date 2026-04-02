@@ -4,6 +4,7 @@ bazel-*
 /bazel-out
 /bazel-testlogs
 /bazel-cakeprotocol
+user.bazelrc
 
 # IDE / Editor
 .vscode/
