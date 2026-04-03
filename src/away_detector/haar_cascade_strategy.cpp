@@ -39,6 +39,7 @@ auto HaarCascadeStrategy::is_away() const noexcept -> bool {
   cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
 
   std::vector<cv::Rect> faces;
+  // TODO: Maybe need to tweak this
   m_cascade.detectMultiScale(gray, faces, 1.1, 3, 0, cv::Size(80, 80));
 
   if (faces.empty()) {
