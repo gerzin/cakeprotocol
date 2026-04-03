@@ -45,21 +45,22 @@ public:
   ScreenLocker() = default;
   ~ScreenLocker() = default;
   ScreenLocker(const ScreenLocker &) = delete;
-  ScreenLocker &operator=(const ScreenLocker &) = delete;
+  auto operator=(const ScreenLocker &) -> ScreenLocker & = delete;
   ScreenLocker(ScreenLocker &&) = delete;
-  ScreenLocker &operator=(ScreenLocker &&) = delete;
-  [[nodiscard]] static LockResult lock() noexcept;
-  [[nodiscard]] static consteval std::string_view platform_name() noexcept;
+  auto operator=(ScreenLocker &&) -> ScreenLocker & = delete;
+  [[nodiscard]] static auto lock() noexcept -> LockResult;
+  [[nodiscard]] static consteval auto platform_name() noexcept
+      -> std::string_view;
 
 private:
 #ifdef SL_PLATFORM_LINUX
   // Tries different screen-locking commands for linux hoping to find one that
   // works.
-  [[nodiscard]] static bool try_command(std::string_view cmd) noexcept;
+  [[nodiscard]] static auto try_command(std::string_view cmd) noexcept -> bool;
 #endif
 };
 
-consteval std::string_view ScreenLocker::platform_name() noexcept {
+consteval auto ScreenLocker::platform_name() noexcept -> std::string_view {
 #ifdef SL_PLATFORM_LINUX
   return "Linux";
 #elif defined(SL_PLATFORM_MACOS)
@@ -69,7 +70,7 @@ consteval std::string_view ScreenLocker::platform_name() noexcept {
 #endif
 }
 
-inline LockResult ScreenLocker::lock() noexcept {
+inline auto ScreenLocker::lock() noexcept -> LockResult {
 
 #if defined(SL_PLATFORM_LINUX)
   // On Linux we try a list of common screen-locking commands hoping one works.
@@ -111,7 +112,7 @@ inline LockResult ScreenLocker::lock() noexcept {
 #endif
 }
 #if defined(SL_PLATFORM_LINUX)
-inline bool ScreenLocker::try_command(std::string_view cmd) noexcept {
+inline auto ScreenLocker::try_command(std::string_view cmd) noexcept -> bool {
   // Redirect stderr to /dev/null so failed attempts are silent.
   const auto full{std::string(cmd) + " 2>/dev/null"};
   return std::system(full.c_str()) == 0;

@@ -24,6 +24,7 @@ public:
 
 private:
   Config m_config;
+  // is_away() is logically const but needs to modify these members
   mutable cv::CascadeClassifier m_cascade;
   mutable int m_consecutive_misses = 0;
 };
