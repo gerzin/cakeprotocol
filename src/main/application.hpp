@@ -2,6 +2,7 @@
 
 #include "away_detector/away_detector.hpp"
 #include "away_detector/haar_cascade_strategy.hpp"
+#include "away_detector/idle_input_strategy.hpp"
 #include <atomic>
 #include <chrono>
 
@@ -16,6 +17,7 @@ public:
   auto run() -> void;
 
   static auto request_stop() -> void;
+  [[nodiscard]] static auto stop_requested() -> bool;
 
 private:
   Config m_config;

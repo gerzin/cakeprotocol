@@ -41,3 +41,16 @@ cc_library(
         "@spdlog",
     ],
 )
+
+cc_library(
+    name = "idle_input_strategy",
+    srcs = ["idle_input_strategy.cpp"],
+    hdrs = ["idle_input_strategy.hpp"],
+    include_prefix = "away_detector",
+    strip_include_prefix = "",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":detection_strategies",
+        "@spdlog",
+    ],
+)

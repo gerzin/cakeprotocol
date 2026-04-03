@@ -11,6 +11,7 @@ cc_binary(
     deps = [
         "//src/away_detector",
         "//src/away_detector:haar_cascade_strategy",
+        "//src/away_detector:idle_input_strategy",
         "//src/screen_locker",
         "//third_party:argparse",
         "@spdlog",

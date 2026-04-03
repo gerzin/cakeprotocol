@@ -6,6 +6,11 @@
 
 namespace cake::away_detector::strategies {
 
+/**
+ * @brief Strategy that uses a Haar Cascade classifier to detect if the user is
+ * away.
+ *
+ */
 class HaarCascadeStrategy : public AwayDetectorStrategy {
 public:
   explicit HaarCascadeStrategy(std::string_view cascade_path, int camera_index,

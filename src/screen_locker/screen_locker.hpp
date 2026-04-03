@@ -10,20 +10,20 @@
 #include <string_view>
 
 #if defined(__linux__)
-#define SL_PLATFORM_LINUX
+#define IS_PLATFORM_LINUX
 #elif defined(__APPLE__) && defined(__MACH__)
-#define SL_PLATFORM_MACOS
+#define IS_PLATFORM_MACOS
 #elif defined(_WIN32) || defined(_WIN64)
-#define SL_PLATFORM_WINDOWS
+#define IS_PLATFORM_WINDOWS
 #error "ScreenLocker: unsupported platform"
 #endif
 
-#if defined(SL_PLATFORM_LINUX) || defined(SL_PLATFORM_MACOS)
+#if defined(IS_PLATFORM_LINUX) || defined(IS_PLATFORM_MACOS)
 #include <array>
 #include <cstdlib>
 #endif
 
-#if defined(SL_PLATFORM_WINDOWS)
+#if defined(IS_PLATFORM_WINDOWS)
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -53,7 +53,7 @@ public:
       -> std::string_view;
 
 private:
-#ifdef SL_PLATFORM_LINUX
+#ifdef IS_PLATFORM_LINUX
   // Tries different screen-locking commands for linux hoping to find one that
   // works.
   [[nodiscard]] static auto try_command(std::string_view cmd) noexcept -> bool;
@@ -61,9 +61,9 @@ private:
 };
 
 consteval auto ScreenLocker::platform_name() noexcept -> std::string_view {
-#ifdef SL_PLATFORM_LINUX
+#ifdef IS_PLATFORM_LINUX
   return "Linux";
-#elif defined(SL_PLATFORM_MACOS)
+#elif defined(IS_PLATFORM_MACOS)
   return "macOS";
 #else
   return "Windows";
@@ -72,7 +72,7 @@ consteval auto ScreenLocker::platform_name() noexcept -> std::string_view {
 
 inline auto ScreenLocker::lock() noexcept -> LockResult {
 
-#if defined(SL_PLATFORM_LINUX)
+#if defined(IS_PLATFORM_LINUX)
   // On Linux we try a list of common screen-locking commands hoping one works.
   constexpr std::array candidates{
       "loginctl lock-session",
@@ -90,7 +90,7 @@ inline auto ScreenLocker::lock() noexcept -> LockResult {
       "All screen-lock commands failed. "
       "Ensure one of: loginctl, xdg-screensaver, "
       "gnome-screensaver-command, or dm-tool is installed and accessible.");
-#elif defined(SL_PLATFORM_WINDOWS)
+#elif defined(IS_PLATFORM_WINDOWS)
   // LockWorkStation() is the official Win32 API call.
   if (::LockWorkStation() == 0) {
     const DWORD err{::GetLastError()};
@@ -98,7 +98,7 @@ inline auto ScreenLocker::lock() noexcept -> LockResult {
                            std::to_string(err) + ")");
   }
   return {};
-#elif defined(SL_PLATFORM_MACOS)
+#elif defined(IS_PLATFORM_MACOS)
   // CGSession -suspend locks the screen and returns to the login window.
   constexpr std::string_view cmd {
     R"(/System/Library/CoreServices/Menu\ Extras/User.menu/)"
@@ -111,7 +111,7 @@ inline auto ScreenLocker::lock() noexcept -> LockResult {
   return {};
 #endif
 }
-#if defined(SL_PLATFORM_LINUX)
+#if defined(IS_PLATFORM_LINUX)
 inline auto ScreenLocker::try_command(std::string_view cmd) noexcept -> bool {
   // Redirect stderr to /dev/null so failed attempts are silent.
   const auto full{std::string(cmd) + " 2>/dev/null"};

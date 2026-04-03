@@ -1,10 +1,17 @@
 #include "application.hpp"
 #include "screen_locker/screen_locker.hpp"
+#include <condition_variable>
 #include <memory>
+#include <mutex>
 #include <spdlog/spdlog.h>
 #include <thread>
 
 std::atomic<bool> Application::m_stop_requested{false};
+
+namespace {
+std::mutex g_cv_mutex;
+std::condition_variable g_cv;
+} // namespace
 
 Application::Application(Config config)
     : m_config{std::move(config)}, m_detector{[this] {
@@ -14,10 +21,19 @@ Application::Application(Config config)
                 cake::away_detector::strategies::HaarCascadeStrategy>(
                 m_config.detector.cascade_path, m_config.detector.camera_index,
                 m_config.detector.miss_threshold));
+        strategies.push_back(
+            std::make_unique<
+                cake::away_detector::strategies::IdleInputStrategy>(
+                m_config.poll_interval * m_config.detector.miss_threshold));
         return strategies;
       }()} {}
 
-auto Application::request_stop() -> void { m_stop_requested.store(true); }
+auto Application::request_stop() -> void {
+  m_stop_requested.store(true);
+  g_cv.notify_all();
+}
+
+auto Application::stop_requested() -> bool { return m_stop_requested.load(); }
 
 auto Application::run() -> void {
   using cake::screen_locker::ScreenLocker;
@@ -35,7 +51,11 @@ auto Application::run() -> void {
         spdlog::error("Failed to lock screen: {}", result.error());
       }
     }
-    std::this_thread::sleep_for(m_config.poll_interval);
+    {
+      std::unique_lock lock{g_cv_mutex};
+      g_cv.wait_for(lock, m_config.poll_interval,
+                    [] { return m_stop_requested.load(); });
+    }
   }
 
   spdlog::info("Shutting down");

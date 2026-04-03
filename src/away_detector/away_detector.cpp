@@ -7,7 +7,7 @@ AwayDetector::AwayDetector(std::vector<StrategyPtr> strategies)
     : m_strategies{std::move(strategies)} {}
 
 auto AwayDetector::is_away() const noexcept -> bool {
-  return std::ranges::any_of(m_strategies,
+  return std::ranges::all_of(m_strategies,
                              [](const auto &s) { return s->is_away(); });
 }
 
