@@ -10,7 +10,7 @@
 namespace {
 void signal_handler(int /*signum*/) {
   if (Application::stop_requested()) {
-    std::_Exit(EXIT_FAILURE);
+    std::exit(EXIT_SUCCESS);
   }
   Application::request_stop();
 }
