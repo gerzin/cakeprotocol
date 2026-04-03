@@ -28,7 +28,8 @@ auto main(int argc, char **argv) -> int {
       .default_value(std::string{"data/haarcascades/"
                                  "haarcascade_frontalface_default.xml"})
       .help("path to Haar cascade XML file");
-
+  // using int instead of unsigned because argparse uses std::from_chars
+  // internally
   args.add_argument("--camera-index")
       .default_value(0)
       .scan<'i', int>()
@@ -48,6 +49,16 @@ auto main(int argc, char **argv) -> int {
     args.parse_args(argc, argv);
   } catch (const std::exception &err) {
     spdlog::error("Error: {}", err.what());
+    return EXIT_FAILURE;
+  }
+
+  if (args.get<int>("--miss-threshold") <= 0) {
+    spdlog::error("--miss-threshold must be a positive integer");
+    return EXIT_FAILURE;
+  }
+
+  if (args.get<int>("--poll-interval") <= 0) {
+    spdlog::error("--poll-interval must be a positive integer");
     return EXIT_FAILURE;
   }
 
