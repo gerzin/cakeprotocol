@@ -9,14 +9,48 @@ cc_library(
     name = "away_detector",
     srcs = ["away_detector.cpp"],
     hdrs = ["away_detector.hpp"],
+    include_prefix = "away_detector",
+    strip_include_prefix = "",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":detection_strategies",
+    ],
+)
+
+cc_library(
+    name = "detection_strategies",
+    hdrs = ["detection_strategies.hpp"],
+    include_prefix = "away_detector",
+    strip_include_prefix = "",
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "haar_cascade_strategy",
+    srcs = ["haar_cascade_strategy.cpp"],
+    hdrs = ["haar_cascade_strategy.hpp"],
     data = ["//data:haarcascades"],
     include_prefix = "away_detector",
     strip_include_prefix = "",
     visibility = ["//visibility:public"],
     deps = [
+        ":detection_strategies",
         "@opencv//:imgproc",
         "@opencv//:objdetect",
         "@opencv//:videoio",
+        "@spdlog",
+    ],
+)
+
+cc_library(
+    name = "idle_input_strategy",
+    srcs = ["idle_input_strategy.cpp"],
+    hdrs = ["idle_input_strategy.hpp"],
+    include_prefix = "away_detector",
+    strip_include_prefix = "",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":detection_strategies",
         "@spdlog",
     ],
 )

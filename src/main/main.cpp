@@ -4,13 +4,21 @@
 #include <cstdlib>
 #include <exception>
 #include <filesystem>
+#include <spdlog/cfg/env.h>
 #include <spdlog/spdlog.h>
 
 namespace {
-void signal_handler(int /*signum*/) { Application::request_stop(); }
+void signal_handler(int /*signum*/) {
+  if (Application::stop_requested()) {
+    std::_Exit(EXIT_FAILURE);
+  }
+  Application::request_stop();
+}
 } // namespace
 
 auto main(int argc, char **argv) -> int {
+  spdlog::cfg::load_env_levels();
+
   argparse::ArgumentParser args{std::filesystem::path{argv[0]}.stem().string()};
 
   args.add_description("A simple application to detect user presence and lock "
