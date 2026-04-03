@@ -1,7 +1,9 @@
 #pragma once
 
-#include <opencv2/objdetect.hpp>
+#include "away_detector/detection_strategies.hpp"
+#include <memory>
 #include <string>
+#include <vector>
 
 namespace cake::away_detector {
 
@@ -13,20 +15,19 @@ struct Config {
 
 class AwayDetector {
 public:
-  explicit AwayDetector(Config config);
+  using StrategyPtr = std::unique_ptr<strategies::AwayDetectorStrategy>;
+
+  explicit AwayDetector(std::vector<StrategyPtr> strategies);
   ~AwayDetector() = default;
   AwayDetector(const AwayDetector &) = delete;
   AwayDetector &operator=(const AwayDetector &) = delete;
-  AwayDetector(AwayDetector &&) = delete;
-  AwayDetector &operator=(AwayDetector &&) = delete;
+  AwayDetector(AwayDetector &&) = default;
+  AwayDetector &operator=(AwayDetector &&) = default;
 
   [[nodiscard]] auto is_away() const noexcept -> bool;
 
 private:
-  Config m_config;
-  // is_away() is logically const but needs to modify these members
-  mutable cv::CascadeClassifier m_cascade;
-  mutable int m_consecutive_misses = 0;
+  std::vector<StrategyPtr> m_strategies;
 };
 
 } // namespace cake::away_detector

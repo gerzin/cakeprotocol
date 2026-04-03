@@ -1,12 +1,21 @@
 #include "application.hpp"
 #include "screen_locker/screen_locker.hpp"
+#include <memory>
 #include <spdlog/spdlog.h>
 #include <thread>
 
 std::atomic<bool> Application::m_stop_requested{false};
 
 Application::Application(Config config)
-    : m_config{std::move(config)}, m_detector{m_config.detector} {}
+    : m_config{std::move(config)}, m_detector{[this] {
+        std::vector<cake::away_detector::AwayDetector::StrategyPtr> strategies;
+        strategies.push_back(
+            std::make_unique<
+                cake::away_detector::strategies::HaarCascadeStrategy>(
+                m_config.detector.cascade_path, m_config.detector.camera_index,
+                m_config.detector.miss_threshold));
+        return strategies;
+      }()} {}
 
 auto Application::request_stop() -> void { m_stop_requested.store(true); }
 

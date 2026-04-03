@@ -1,6 +1,7 @@
 #pragma once
 
 #include "away_detector/away_detector.hpp"
+#include "away_detector/haar_cascade_strategy.hpp"
 #include <atomic>
 #include <chrono>
 
