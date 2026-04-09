@@ -28,6 +28,9 @@ private:
   int m_camera_index;
   int m_miss_threshold;
   mutable cv::CascadeClassifier m_cascade;
-  mutable int m_consecutive_misses = 0;
+  mutable int m_consecutive_misses{0};
+#ifdef CAKE_DEBUG_VIZ
+  mutable int m_frame_counter{0};
+#endif
 };
 } // namespace cake::away_detector::strategies

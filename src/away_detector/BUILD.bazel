@@ -30,6 +30,10 @@ cc_library(
     srcs = ["haar_cascade_strategy.cpp"],
     hdrs = ["haar_cascade_strategy.hpp"],
     data = ["//data:haarcascades"],
+    defines = select({
+        "//:debug_viz": ["CAKE_DEBUG_VIZ"],
+        "//conditions:default": [],
+    }),
     include_prefix = "away_detector",
     strip_include_prefix = "",
     visibility = ["//visibility:public"],
@@ -39,7 +43,10 @@ cc_library(
         "@opencv//:objdetect",
         "@opencv//:videoio",
         "@spdlog",
-    ],
+    ] + select({
+        "//:debug_viz": ["@opencv//:imgcodecs"],
+        "//conditions:default": [],
+    }),
 )
 
 cc_library(
