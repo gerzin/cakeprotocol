@@ -41,3 +41,30 @@ bazel run //:refresh_compile_commands
 ```sh
 bazel run //tools:bazelrc.update
 ```
+
+## Running as a daemon (systemd)
+
+The binary handles `SIGTERM`/`SIGINT` for graceful shutdown, so it works well as a systemd user service.
+
+Create `~/.config/systemd/user/cakeprotocol.service`:
+```ini
+[Unit]
+Description=CakeProtocol face presence detector
+
+[Service]
+ExecStart=/usr/local/bin/cakeprotocol
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+```
+
+Then enable and start it:
+```sh
+systemctl --user enable --now cakeprotocol
+```
+
+Check logs with:
+```sh
+journalctl --user -u cakeprotocol -f
+```
