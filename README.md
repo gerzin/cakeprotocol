@@ -49,7 +49,7 @@ The binary handles `SIGTERM`/`SIGINT` for graceful shutdown, so it works well as
 Create `~/.config/systemd/user/cakeprotocol.service`:
 ```ini
 [Unit]
-Description=CakeProtocol face presence detector
+Description=CakeProtocol user presence detector
 
 [Service]
 ExecStart=/usr/local/bin/cakeprotocol
