@@ -2,13 +2,11 @@
 
 #include "away_detector/detection_strategies.hpp"
 #include <memory>
-#include <string>
 #include <vector>
 
 namespace cake::away_detector {
 
 struct Config {
-  std::string cascade_path;
   int camera_index = 0;
   int miss_threshold = 3;
 };

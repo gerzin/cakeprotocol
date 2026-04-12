@@ -29,7 +29,6 @@ cc_library(
     name = "haar_cascade_strategy",
     srcs = ["haar_cascade_strategy.cpp"],
     hdrs = ["haar_cascade_strategy.hpp"],
-    data = ["//data:haarcascades"],
     defines = select({
         "//:debug_viz": ["CAKE_DEBUG_VIZ"],
         "//conditions:default": [],
@@ -39,6 +38,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":detection_strategies",
+        "//data:haarcascade_embedded",
         "@opencv//:imgproc",
         "@opencv//:objdetect",
         "@opencv//:videoio",
