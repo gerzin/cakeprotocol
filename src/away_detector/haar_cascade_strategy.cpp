@@ -19,8 +19,7 @@ HaarCascadeStrategy::HaarCascadeStrategy(int camera_index, int miss_threshold)
   std::string xml_data(
       reinterpret_cast<const char *>(cake::data::kHaarCascadeData),
       cake::data::kHaarCascadeDataSize);
-  cv::FileStorage fs(xml_data,
-                     cv::FileStorage::READ | cv::FileStorage::MEMORY);
+  cv::FileStorage fs(xml_data, cv::FileStorage::READ | cv::FileStorage::MEMORY);
   if (!fs.isOpened() || !m_cascade.read(fs.getFirstTopLevelNode())) {
     spdlog::error("Failed to load embedded cascade classifier");
   }
