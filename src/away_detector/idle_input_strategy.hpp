@@ -25,10 +25,6 @@ namespace cake::away_detector::strategies {
  * Uses platform-specific APIs to query how long since the last keyboard/mouse
  * event. If idle time exceeds the configured threshold the user is considered
  * away.
- *
- * - Linux:   reads idle time via xprintidle (X11) or similar.
- * - macOS:   CGEventSourceSecondsSinceLastEventType (CoreGraphics).
- * - Windows: GetLastInputInfo (Win32).
  */
 class IdleInputStrategy : public AwayDetectorStrategy {
 public:
