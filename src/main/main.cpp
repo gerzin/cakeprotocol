@@ -24,10 +24,6 @@ auto main(int argc, char **argv) -> int {
   args.add_description("A simple application to detect user presence and lock "
                        "the screen when away.");
 
-  args.add_argument("--cascade-path")
-      .default_value(std::string{"data/haarcascades/"
-                                 "haarcascade_frontalface_default.xml"})
-      .help("path to Haar cascade XML file");
   // using int instead of unsigned because argparse uses std::from_chars
   // internally
   args.add_argument("--camera-index")
@@ -68,7 +64,6 @@ auto main(int argc, char **argv) -> int {
   Application::Config config{
       .detector =
           {
-              .cascade_path = args.get<std::string>("--cascade-path"),
               .camera_index = args.get<int>("--camera-index"),
               .miss_threshold = args.get<int>("--miss-threshold"),
           },
