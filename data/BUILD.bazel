@@ -1,5 +1,31 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 filegroup(
     name = "haarcascades",
     srcs = glob(["haarcascades/*.xml"]),
+    visibility = ["//visibility:public"],
+)
+
+genrule(
+    name = "haarcascade_embedded_src",
+    srcs = ["haarcascades/haarcascade_frontalface_default.xml"],
+    outs = ["haarcascade_embedded.cpp"],
+    cmd = "\n".join([
+        "echo '#include \"data/haarcascade_embedded.hpp\"' > $@",
+        "echo 'namespace cake::data {' >> $@",
+        "echo 'extern const unsigned char kHaarCascadeData[] = {' >> $@",
+        "xxd -i < $< >> $@",
+        "echo '};' >> $@",
+        "echo 'extern const std::size_t kHaarCascadeDataSize = sizeof(kHaarCascadeData);' >> $@",
+        "echo '} // namespace cake::data' >> $@",
+    ]),
+)
+
+cc_library(
+    name = "haarcascade_embedded",
+    srcs = ["haarcascade_embedded.cpp"],
+    hdrs = ["haarcascade_embedded.hpp"],
+    include_prefix = "data",
+    strip_include_prefix = "",
     visibility = ["//visibility:public"],
 )

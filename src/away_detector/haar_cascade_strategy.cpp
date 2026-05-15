@@ -1,8 +1,11 @@
 #include "away_detector/haar_cascade_strategy.hpp"
+#include "data/haarcascade_embedded.hpp"
+#include <opencv2/core/persistence.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/objdetect.hpp>
 #include <opencv2/videoio.hpp>
 #include <spdlog/spdlog.h>
+#include <string>
 #ifdef CAKE_DEBUG_VIZ
 #include <filesystem>
 #include <fmt/format.h>
@@ -11,13 +14,14 @@
 
 namespace cake::away_detector::strategies {
 
-HaarCascadeStrategy::HaarCascadeStrategy(std::string_view cascade_path,
-                                         int camera_index, int miss_threshold)
-    : m_cascade_path{cascade_path}, m_camera_index{camera_index},
-      m_miss_threshold{miss_threshold} {
-  if (!m_cascade.load(m_cascade_path)) {
-    spdlog::error("Failed to load cascade classifier from '{}'",
-                  m_cascade_path);
+HaarCascadeStrategy::HaarCascadeStrategy(int camera_index, int miss_threshold)
+    : m_camera_index{camera_index}, m_miss_threshold{miss_threshold} {
+  std::string xml_data(
+      reinterpret_cast<const char *>(cake::data::kHaarCascadeData),
+      cake::data::kHaarCascadeDataSize);
+  cv::FileStorage fs(xml_data, cv::FileStorage::READ | cv::FileStorage::MEMORY);
+  if (!fs.isOpened() || !m_cascade.read(fs.getFirstTopLevelNode())) {
+    spdlog::error("Failed to load embedded cascade classifier");
   }
 }
 

@@ -19,7 +19,7 @@ Application::Application(Config config)
         strategies.push_back(
             std::make_unique<
                 cake::away_detector::strategies::HaarCascadeStrategy>(
-                m_config.detector.cascade_path, m_config.detector.camera_index,
+                m_config.detector.camera_index,
                 m_config.detector.miss_threshold));
         strategies.push_back(
             std::make_unique<
