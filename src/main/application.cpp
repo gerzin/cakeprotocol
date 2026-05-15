@@ -1,36 +1,35 @@
 #include "application.hpp"
 #include "screen_locker/screen_locker.hpp"
 #include <condition_variable>
-#include <memory>
 #include <mutex>
 #include <spdlog/spdlog.h>
-#include <thread>
+
+using cake::away_detector::AwayDetector;
+using cake::away_detector::strategies::HaarCascadeStrategy;
+using cake::away_detector::strategies::IdleInputStrategy;
 
 std::atomic<bool> Application::m_stop_requested{false};
 
 namespace {
-std::mutex g_cv_mutex;
-std::condition_variable g_cv;
+std::mutex g_mutex_stop_requested;
+std::condition_variable g_cv_stop_requested;
 } // namespace
 
 Application::Application(Config config)
-    : m_config{std::move(config)}, m_detector{[this] {
-        std::vector<cake::away_detector::AwayDetector::StrategyPtr> strategies;
-        strategies.push_back(
-            std::make_unique<
-                cake::away_detector::strategies::HaarCascadeStrategy>(
-                m_config.detector.camera_index,
-                m_config.detector.miss_threshold));
-        strategies.push_back(
-            std::make_unique<
-                cake::away_detector::strategies::IdleInputStrategy>(
-                m_config.poll_interval * m_config.detector.miss_threshold));
+    : m_config{std::move(config)},
+      m_detector{[this] { // AwayDetector has no default constructor, so we need
+                          // to construct the strategies first
+        std::vector<AwayDetector::StrategyPtr> strategies;
+        strategies.push_back(std::make_unique<HaarCascadeStrategy>(
+            m_config.detector.camera_index, m_config.detector.miss_threshold));
+        strategies.push_back(std::make_unique<IdleInputStrategy>(
+            m_config.poll_interval * m_config.detector.miss_threshold));
         return strategies;
       }()} {}
 
 auto Application::request_stop() -> void {
   m_stop_requested.store(true);
-  g_cv.notify_all();
+  g_cv_stop_requested.notify_all();
 }
 
 auto Application::stop_requested() -> bool { return m_stop_requested.load(); }
@@ -52,9 +51,9 @@ auto Application::run() -> void {
       }
     }
     {
-      std::unique_lock lock{g_cv_mutex};
-      g_cv.wait_for(lock, m_config.poll_interval,
-                    [] { return m_stop_requested.load(); });
+      std::unique_lock lock{g_mutex_stop_requested};
+      g_cv_stop_requested.wait_for(lock, m_config.poll_interval,
+                                   [] { return m_stop_requested.load(); });
     }
   }
 

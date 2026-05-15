@@ -1,0 +1,10 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "utils",
+    srcs = ["json_encoder.hpp"],
+    hdrs = ["json_encoder.hpp"],
+    include_prefix = "utils",
+    strip_include_prefix = "",
+    visibility = ["//visibility:public"],
+)
