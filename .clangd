@@ -2,6 +2,9 @@ CompileFlags:
   Add:
     - "-std=c++23"
     - "-xc++"
+  Remove:
+    - "-fno-canonical-system-headers"
+    - "*-canonical-system-headers"
   CompilationDatabase: .
 
 Diagnostics:

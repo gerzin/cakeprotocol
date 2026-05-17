@@ -4,7 +4,6 @@
 #include "utils/json_encoder.hpp"
 #include <format>
 #include <memory>
-#include <string_view>
 #include <vector>
 
 namespace cake::away_detector {

@@ -16,7 +16,7 @@ std::condition_variable g_cv_stop_requested;
 } // namespace
 
 Application::Application(Config config)
-    : m_config{std::move(config)},
+    : m_config{config},
       m_detector{[this] { // AwayDetector has no default constructor, so we need
                           // to construct the strategies first
         std::vector<AwayDetector::StrategyPtr> strategies;
