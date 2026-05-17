@@ -1,14 +1,23 @@
 #pragma once
 
 #include "away_detector/detection_strategies.hpp"
+#include "utils/json_encoder.hpp"
+#include <format>
 #include <memory>
 #include <vector>
 
 namespace cake::away_detector {
 
-struct Config {
+struct Config : public cake::utils::JsonEncoder {
+  friend class cake::utils::JsonEncoder;
   int camera_index = 0;
   int miss_threshold = 3;
+
+private:
+  [[nodiscard]] auto to_json_impl() const -> std::string {
+    return std::format(R"({{"camera_index": {}, "miss_threshold": {}}})",
+                       camera_index, miss_threshold);
+  }
 };
 
 class AwayDetector {
